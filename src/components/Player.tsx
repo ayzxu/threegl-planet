@@ -1,7 +1,7 @@
 // src/components/Player.tsx
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
-import { useEffect, useMemo, useRef, forwardRef } from 'react'
+import { useEffect, useMemo, useRef, forwardRef, useImperativeHandle } from 'react'
 import { useKeyboardControls, OrbitControls } from '@react-three/drei'
 import useStore from '../state'
 import Footsteps from './Footsteps'
@@ -15,17 +15,14 @@ type Props = {
 }
 
 const Player = forwardRef<THREE.Group, Props>(({ planetCenter = [0, 0, 0], planetRadius, low = false, onPlayerReady }, ref) => {
-  const internalRef = useRef<THREE.Group>(null!)
-  const playerRef = ref || internalRef
+  const playerRef = useRef<THREE.Group>(null!)
+
+  useImperativeHandle(ref, () => playerRef.current!, [])
+
+  type ControlNames = 'forward' | 'back' | 'left' | 'right' | 'reset'
 
   // ✅ New API: get [subscribe, get] from the hook
-  const [subscribeKeys, getKeys] = useKeyboardControls<{
-    forward: boolean
-    back: boolean
-    left: boolean
-    right: boolean
-    reset: boolean
-  }>()
+  const [subscribeKeys, getKeys] = useKeyboardControls<ControlNames>()
 
   const speed = low ? 2.5 : 3.5
   const center = useMemo(() => new THREE.Vector3(...planetCenter), [planetCenter])
