@@ -4,6 +4,7 @@ import { Environment, Html, KeyboardControls, StatsGl } from '@react-three/drei'
 import * as THREE from 'three'
 import Planet from './components/Planet'
 import Player from './components/Player'
+import AIPlayer from './components/AIPlayer'
 import Camera from './components/Camera'
 import UI from './components/UI'
 
@@ -46,6 +47,7 @@ export default function App() {
             <Environment preset="sunset" />
             <Planet radius={10} />
             <Player ref={playerRef} planetCenter={[0,0,0]} planetRadius={10} low={low} onPlayerReady={handlePlayerReady} />
+            <AIPlayer planetCenter={[0,0,0]} planetRadius={10} low={low} />
             <Camera 
               target={playerObject} 
               planetCenter={[0, 0, 0]} 
